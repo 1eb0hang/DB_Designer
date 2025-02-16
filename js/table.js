@@ -2,4 +2,5 @@
 
 export function Table(fields){
   this.fields = fields;
+  this.draw = function()
 }

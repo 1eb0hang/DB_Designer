@@ -13,31 +13,3 @@ let win = {
 canvas.width = win.width;
 canvas.height = win.height;
 canvas.style.background = "#eee";
-
-ctx.fillStyle = "red";
-ctx.fillRect(100, 100, 100, 22);
-// ctx.strokeStyle = "black";
-ctx.fillStyle = "black";
-ctx.font = "16px Consolas";
-ctx.fillText("Example text", 100, 116);
-
-// const constraints = createConstraints(
-//   true,
-//   false,
-//   false,
-//   true,
-//   false,
-//   false,
-//   null
-// )
-//
-// const field = createField(
-//   "id",
-//   "Integer",
-//   null,
-//   null,
-//   null,
-//   constraints,
-// )
-//
-// console.log(field);

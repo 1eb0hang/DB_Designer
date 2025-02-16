@@ -4,23 +4,36 @@ import {createConstraints} from "./constraints.js"
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const constraints = createConstraints(
-  true,
-  false,
-  false,
-  true,
-  false,
-  false,
-  null
-)
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+let win = {
+  width:window.innerWidth,
+  height:window.innerHeight
+}
 
-const field = createField(
-  "id",
-  "Integer",
-  null,
-  null,
-  null,
-  constraints,
-)
+canvas.width = win.width;
+canvas.height = win.height;
+canvas.style.background = "#eee";
 
-console.log(field);
+ctx.fillStyle = "red";
+ctx.fillRect(100, 100, 100, 100);
+
+// const constraints = createConstraints(
+//   true,
+//   false,
+//   false,
+//   true,
+//   false,
+//   false,
+//   null
+// )
+//
+// const field = createField(
+//   "id",
+//   "Integer",
+//   null,
+//   null,
+//   null,
+//   constraints,
+// )
+//
+// console.log(field);

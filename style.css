@@ -1,0 +1,22 @@
+#ctx{
+  width: 280px;
+  margin:0;
+  padding-left:0;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+  background: #fff;
+  position:fixed;
+  font-size: 16px;
+  visibility: hidden;
+}
+
+.ctx-link{
+  list-style-type: none;
+  padding: 0.75em 1em;
+  font-size: 0.85em;
+  font-family: sans-serif;
+  cursor: pointer;
+}
+
+.ctx-link:hover{
+  background: #efefef;
+}

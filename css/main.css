@@ -1,5 +1,6 @@
 
 @import "contextmenu.css";
+@import "form1.css";
 
 *{
   margin:0;
@@ -7,5 +8,5 @@
 }
 
 body{
-  overflow: hidden;
+  /* overflow: hidden; */
 }

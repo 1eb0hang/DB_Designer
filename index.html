@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -9,60 +9,77 @@
   </head>
   <body>
     <canvas id="canvas"></canvas>
-  </body>
-</html> -->
 
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>ctxMenu</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="script.js" defer>
-    </script>
-  </head>
-  <body>
-    <div class="eg">
-      <label for="name">Name: </label>
-      <input type="text" name="Name" value="">
+    <form class="form">
+      <div class="input">
+        <div class="textInput">
+          <div class="form_field">
+            <label for="name">Name: </label>
+            <input type="text" name="Name" value="">
+          </div>
 
-      <label for="type">Type:</label>
-      <select id="type" name="">
-        <option value="int">INTEGER</option>
-        <option value="text">TEXT</option>
-        <option value="text">BOOLEAN</option>
-    </select>
+          <div class="form_field">
+            <label for="type">Type:</label>
+            <select id="type" name="">
+              <option value="int">INTEGER</option>
+              <option value="text">TEXT</option>
+              <option value="text">BOOLEAN</option>
+            </select>
+          </div>
 
-      <label for="size">Size: </label>
-      <input type="text" name="size" value="">
+          <div class="form_field">
+            <label for="size">Size: </label>
+            <input type="text" name="size" value="">
+          </div>
 
-      <label for="default">Default: </label>
-      <input type="text" name="default" value="">
+          <div class="form_field">
+            <label for="default">Default: </label>
+            <input type="text" name="default" value="">
+          </div>
 
-      <label for="description">Description: </label>
-      <input type="text" name="description" value="">
+          <div class="form_field">
+            <label for="description">Description: </label>
+            <input type="text" name="description" value="">
+          </div>
+        </div>
 
-      <div class="constraints">
-        <label for="pk">Primary Key</label>
-        <input type="checkbox" name="pk" value="">
+        <div class="form_field">
+          <div class="constraints">
+            <div class="constraint">
+              <label for="pk">Primary Key</label>
+              <input type="checkbox" name="pk" value="">
+            </div>
 
-        <label for="an">Allow Null</label>
-        <input type="checkbox" name="an" value="">
+            <div class="constraint">
+              <label for="an">Allow Null</label>
+              <input type="checkbox" name="an" value="">
+            </div>
 
-        <label for="uq">Unique</label>
-        <input type="checkbox" name="uq" value="">
+            <div class="constraint">
+              <label for="uq">Unique</label>
+              <input type="checkbox" name="uq" value="">
+            </div>
 
-        <label for="ai">Auto Increment</label>
-        <input type="checkbox" name="ai" value="">
+            <div class="constraint">
+              <label for="ai">Auto Increment</label>
+              <input type="checkbox" name="ai" value="">
+            </div>
 
-        <label for="un">Unsigned</label>
-        <input type="checkbox" name="un" value="">
+            <div class="constraint">
+              <label for="un">Unsigned</label>
+              <input type="checkbox" name="un" value="">
+            </div>
 
-        <label for="fk">Foreign Key</label>
-        <input type="checkbox" name="fk" value="">
+            <div class="constraint">
+              <label for="fk">Foreign Key</label>
+              <input type="checkbox" name="fk" value="">
+            </div>
+          </div>
+        </div>
       </div>
 
-      <input type="button" name="btn_add_table" value="Add+">
-    </div>
+      <input type="submit" name="btn_add_table" value="Add+">
+    </form>
+
   </body>
 </html>

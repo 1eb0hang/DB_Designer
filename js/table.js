@@ -47,3 +47,7 @@ const textRect(text, x, y, colour){
   ctx.font = "16px Consolas";
   ctx.fillText(text, x, y+16);
 }
+
+export function tableForm(document){
+  const form = document.createElement("form");
+}

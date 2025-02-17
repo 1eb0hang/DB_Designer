@@ -1,0 +1,45 @@
+.form{
+  visibility: hidden;
+}
+
+.input {
+    /* max-width: 400px; */
+    /* margin: 20px auto; */
+    /* padding: 20px; */
+    /* background: #f9f9f9; */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display:flex;
+}
+
+label {
+    /* display: block; */
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form_field{
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.constraint{
+  width: 100%;
+}
+  /*
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+  } */

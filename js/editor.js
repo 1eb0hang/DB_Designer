@@ -1,3 +1,4 @@
+// import
 
 const ctxMenu = document.createElement("ul");
 ctxMenu.id = "ctxMenu";
@@ -6,6 +7,10 @@ let ctxMenuShow = false;
 for(let title of ["Add Table", "Add Note", "Import", "Export"]){
   const li = document.createElement("li");
   li.classList.add("ctx-link");
+  // <input type="button" name="add_title" value="Add Title">
+  // li.setAttribute("type","button");
+  // li.setAttribute("value",title);
+  li.value = title;
   const span = document.createElement("span");
   span.classList.add(".ctx-label");
   span.innerText = title;

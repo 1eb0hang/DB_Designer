@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -10,9 +10,9 @@
   <body>
     <canvas id="canvas"></canvas>
   </body>
-</html>
+</html> -->
 
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -22,19 +22,47 @@
     </script>
   </head>
   <body>
-    <ul id="ctx">
-      <li class="ctx-link">
-        <span class="ctx-label">Add Table</span>
-      </li>
-      <li class="ctx-link">
-        <span class="ctx-label">Add Note</span>
-      </li>
-      <li class="ctx-link">
-        <span class="ctx-label">Import</span>
-      </li>
-      <li class="ctx-link">
-        <span class="ctx-label">Export</span>
-      </li>
-    </ul>
+    <div class="eg">
+      <label for="name">Name: </label>
+      <input type="text" name="Name" value="">
+
+      <label for="type">Type:</label>
+      <select id="type" name="">
+        <option value="int">INTEGER</option>
+        <option value="text">TEXT</option>
+        <option value="text">BOOLEAN</option>
+    </select>
+
+      <label for="size">Size: </label>
+      <input type="text" name="size" value="">
+
+      <label for="default">Default: </label>
+      <input type="text" name="default" value="">
+
+      <label for="description">Description: </label>
+      <input type="text" name="description" value="">
+
+      <div class="constraints">
+        <label for="pk">Primary Key</label>
+        <input type="checkbox" name="pk" value="">
+
+        <label for="an">Allow Null</label>
+        <input type="checkbox" name="an" value="">
+
+        <label for="uq">Unique</label>
+        <input type="checkbox" name="uq" value="">
+
+        <label for="ai">Auto Increment</label>
+        <input type="checkbox" name="ai" value="">
+
+        <label for="un">Unsigned</label>
+        <input type="checkbox" name="un" value="">
+
+        <label for="fk">Foreign Key</label>
+        <input type="checkbox" name="fk" value="">
+      </div>
+
+      <input type="button" name="btn_add_table" value="Add+">
+    </div>
   </body>
-</html> -->
+</html>

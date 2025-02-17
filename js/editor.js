@@ -1,11 +1,7 @@
-import {Field, createField} from "./field.js"
-import {createConstraints} from "./constraints.js"
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
 
 const ctxMenu = document.createElement("ul");
 ctxMenu.id = "ctxMenu";
+let ctxMenuShow = false;
 
 for(let title of ["Add Table", "Add Note", "Import", "Export"]){
   const li = document.createElement("li");
@@ -27,22 +23,13 @@ const updateCtxPosition = (x, y)=>{
   ctxMenu.style.top = `${Math.min(maxTop, y)}px`;
 };
 
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-let win = {
-  width:window.innerWidth,
-  height:window.innerHeight
+export function contextMenuShow(event){
+    event.preventDefault()
+    updateCtxPosition(event.clientX, event.clientY);
+    ctxMenu.style.visibility = "visible";
+    ctxMenuShow = true;
 }
 
-canvas.width = win.width;
-canvas.height = win.height;
-canvas.style.background = "#eee";
-
-canvas.addEventListener("contextmenu", (e)=>{
-  e.preventDefault();
-  updateCtxPosition(e.clientX, e.clientY);
-  ctxMenu.style.visibility = "visible";
-});
-
-document.body.addEventListener("click", ()=>{
+export function contextMenuHide(event){
   ctxMenu.style.visibility = null;
-});
+}

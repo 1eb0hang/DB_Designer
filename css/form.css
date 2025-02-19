@@ -10,12 +10,11 @@
 
 .form{
   width: 80%;
-  background: #000000;
   position:absolute;
   left: 10%;
   top: 50px;
   font-size: 16px;
-  background: #fff;
+  background: #fefefe;
   visibility: hidden;
 }
 

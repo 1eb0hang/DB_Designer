@@ -15,6 +15,7 @@ canvas.width = win.width;
 canvas.height = win.height;
 canvas.style.background = "#eee";
 
-canvas.addEventListener("contextmenu", contextMenuShow);
+// document.getElementById("canvas").getContext("2d").fillRect(100, 100, 100, 100);
 
+canvas.addEventListener("contextmenu", contextMenuShow);
 canvas.addEventListener("click", contextMenuHide);

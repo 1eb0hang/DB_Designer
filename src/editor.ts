@@ -14,10 +14,10 @@ class Editor {
         this.ctx = ctx;
     }
 
-    loop(delta:DOMHighResTimeStamp):void{
+    start(delta?:DOMHighResTimeStamp):void{
         this.update();
         this.render();
-        requestAnimationFrame(this.loop);
+        requestAnimationFrame(this.start);
     }
 
     update():void{

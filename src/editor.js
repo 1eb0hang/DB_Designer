@@ -1,4 +1,6 @@
+"use strict";
 // canvas and ctx are already defined
+Object.defineProperty(exports, "__esModule", { value: true });
 class Editor {
     constructor(canvas, ctx) {
         this.canvas = canvas;
@@ -16,4 +18,4 @@ class Editor {
         return;
     }
 }
-export default Editor;
+exports.default = Editor;

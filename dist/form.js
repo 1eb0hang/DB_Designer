@@ -33,30 +33,46 @@ function createTableForm() {
  */
 function createFieldForm() {
     const form = document.createElement("div");
-    [
-        "Name",
-        "Type",
-        "Size",
-        "Default",
-        "Description"
-    ].forEach((value) => {
+    form.classList.add("invisible");
+    for (let value of ["Name", "Type", "Size", "Default", "Description"]) {
         const field = document.createElement("div");
         field.classList.add("field");
         const label = document.createElement("label");
         label.setAttribute("for", value.toLowerCase());
-        // <input type="text" name="" class="">
+        label.innerText = value;
+        field.appendChild(label);
+        if (value.toLowerCase() == "type") {
+            field.appendChild(addSelect(value, ["TEXT", "INTEGER", "BOOLEAN"])); // temporary
+            form.appendChild(field);
+            continue;
+        }
+        ;
         const input = document.createElement("input");
         input.setAttribute("type", "text");
-        //if(value.toLowerCase() == "type") input.setAttribute("type", "select");
         input.setAttribute("name", value.toLowerCase());
-        field.appendChild(label);
         field.appendChild(input);
-        form.appendChild(form);
-    });
+        form.appendChild(field);
+    }
+    ;
     return form;
 }
 function addSelect(value, options) {
-    //return document.
+    const select = document.createElement("select");
+    select.setAttribute("name", value.toLowerCase());
+    options.forEach((value) => {
+        const option = document.createElement("option");
+        option.innerText = value;
+        select.appendChild(option);
+    });
+    return select;
+}
+function addConstraints() {
+    const constraints = document.createElement("div");
+    return constraints;
+}
+function addForeignKeyReference() {
+    const form = document.createElement("div");
+    return form;
 }
 function showForm() {
     return;

@@ -9,5 +9,6 @@ function main() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     const editor = new Editor(canvas, ctx);
-    //editor.start();
+    editor.start();
 }
+main();

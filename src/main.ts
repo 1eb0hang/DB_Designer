@@ -11,5 +11,7 @@ function main(){
     canvas.height = window.innerHeight;
 
     const editor:Editor = new Editor(canvas, ctx);
-    //editor.start();
+    editor.start();
 }
+
+main();

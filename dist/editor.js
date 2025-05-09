@@ -13,7 +13,7 @@ class Editor {
         this.setup();
     }
     start(delta) {
-        // this.update();
+        this.update();
         this.render();
         // requestAnimationFrame(this.start);
     }

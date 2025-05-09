@@ -24,12 +24,12 @@ class Editor {
     }
 
     start(delta?:DOMHighResTimeStamp):void{
-        // this.update();
+        this.update();
         this.render();
         // requestAnimationFrame(this.start);
     }
 
-    setup(){
+    private setup(){
         this.canvas.addEventListener("contextmenu", (e)=>{
             e.preventDefault();
             console.log("Context Menu Requested");

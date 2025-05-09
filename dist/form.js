@@ -9,6 +9,21 @@
 function createTableForm() {
     const form = document.createElement("div");
     form.classList.add("form");
+    const formFields = ["Name", "Description"];
+    formFields.forEach((value) => {
+        const field = document.createElement("div");
+        field.classList.add(value);
+        const label = document.createElement("label");
+        label.setAttribute("for", `${value}Value`);
+        label.innerText = value;
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.classList.add(`${value}Value`);
+        input.id = `${value}Value`;
+        field.appendChild(label);
+        field.appendChild(input);
+        form.appendChild(field);
+    });
     return form;
 }
 /**
@@ -34,19 +49,23 @@ function createTableForm() {
 function createFieldForm() {
     const form = document.createElement("div");
     form.classList.add("invisible");
-    for (let value of ["Name", "Type", "Size", "Default", "Description"]) {
+    const fieldTitles = ["Name", "Type", "Size", "Default", "Description"];
+    for (let value of fieldTitles) {
         const field = document.createElement("div");
         field.classList.add("field");
+        // add label
         const label = document.createElement("label");
         label.setAttribute("for", value.toLowerCase());
         label.innerText = value;
         field.appendChild(label);
+        // add select if value is type
         if (value.toLowerCase() == "type") {
             field.appendChild(addSelect(value, ["TEXT", "INTEGER", "BOOLEAN"])); // temporary
             form.appendChild(field);
             continue;
         }
         ;
+        // add input type text
         const input = document.createElement("input");
         input.setAttribute("type", "text");
         input.setAttribute("name", value.toLowerCase());
@@ -54,8 +73,13 @@ function createFieldForm() {
         form.appendChild(field);
     }
     ;
+    form.appendChild(addConstraints());
+    form.appendChild(addForeignKeyReference());
     return form;
 }
+const body = document.querySelector("body");
+body === null || body === void 0 ? void 0 : body.appendChild(createFieldForm());
+// create select for type
 function addSelect(value, options) {
     const select = document.createElement("select");
     select.setAttribute("name", value.toLowerCase());
@@ -67,12 +91,59 @@ function addSelect(value, options) {
     return select;
 }
 function addConstraints() {
+    /**
+     * - primary key
+     * - allow null
+     * - unique
+     * - auto increment
+     * - foreign key
+     */
     const constraints = document.createElement("div");
+    constraints.classList.add("constraints");
+    const constraintTitles = ["PK", "AN", "UQ", "AI", "FK"];
+    constraintTitles.forEach((value) => {
+        const constraint = document.createElement("div"); // for 1 constraint
+        constraint.classList.add("constraint");
+        // constraint label
+        const title = document.createElement("label");
+        title.setAttribute("for", value);
+        title.innerText = value;
+        //constraint value (boolean)
+        const constraintValue = document.createElement("input");
+        constraintValue.setAttribute("type", "checkbox");
+        constraintValue.setAttribute("name", value);
+        constraintValue.id = value;
+        constraint.appendChild(title);
+        constraint.appendChild(constraintValue);
+        constraints.appendChild(constraint);
+    });
     return constraints;
 }
 function addForeignKeyReference() {
     const form = document.createElement("div");
+    const fieldTitles = ["Ref. Table", "Ref. Field", "On Delete", "On Update"];
+    fieldTitles.forEach((value) => {
+        const field = document.createElement("div");
+        //field.classList.add();
+        const name = value.replace(" ", "").replace(".", "");
+        const label = document.createElement("label");
+        label.setAttribute("for", name);
+        label.innerText = value;
+        //const input:HTMLSelectElement = addForeignKeyOptions(name,tables);
+        //selects
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("name", name);
+        input.id = name;
+        field.appendChild(label);
+        field.appendChild(input);
+        form.appendChild(field);
+    });
     return form;
+}
+function addForeignKeyOptions(name, options) {
+    const select = document.createElement("select");
+    return select;
 }
 function showForm() {
     return;

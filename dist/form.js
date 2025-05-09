@@ -6,7 +6,7 @@
  *
  * @returns new form to create a table object
  */
-function createTableForm() {
+export function createTableForm() {
     const form = document.createElement("div");
     form.classList.add("form");
     const formFields = ["Name", "Description"];
@@ -45,10 +45,12 @@ function createTableForm() {
  * Foreign key options open when foreign key is true:
  * - reference table
  * - reference field
+ * - on delete
+ * - on update
  */
-function createFieldForm() {
+export function createFieldForm() {
     const form = document.createElement("div");
-    form.classList.add("invisible");
+    form.classList.add("form");
     const fieldTitles = ["Name", "Type", "Size", "Default", "Description"];
     for (let value of fieldTitles) {
         const field = document.createElement("div");
@@ -77,8 +79,6 @@ function createFieldForm() {
     form.appendChild(addForeignKeyReference());
     return form;
 }
-const body = document.querySelector("body");
-body === null || body === void 0 ? void 0 : body.appendChild(createFieldForm());
 // create select for type
 function addSelect(value, options) {
     const select = document.createElement("select");
@@ -92,6 +92,7 @@ function addSelect(value, options) {
 }
 function addConstraints() {
     /**
+     * Constraint List
      * - primary key
      * - allow null
      * - unique
@@ -99,8 +100,9 @@ function addConstraints() {
      * - foreign key
      */
     const constraints = document.createElement("div");
-    constraints.classList.add("constraints");
+    constraints.classList.add("constraints", "form");
     const constraintTitles = ["PK", "AN", "UQ", "AI", "FK"];
+    // TODO: Add an onhover or onclick key
     constraintTitles.forEach((value) => {
         const constraint = document.createElement("div"); // for 1 constraint
         constraint.classList.add("constraint");
@@ -121,6 +123,7 @@ function addConstraints() {
 }
 function addForeignKeyReference() {
     const form = document.createElement("div");
+    form.classList.add("foreignKey", "form");
     const fieldTitles = ["Ref. Table", "Ref. Field", "On Delete", "On Update"];
     fieldTitles.forEach((value) => {
         const field = document.createElement("div");
@@ -129,23 +132,41 @@ function addForeignKeyReference() {
         const label = document.createElement("label");
         label.setAttribute("for", name);
         label.innerText = value;
-        //const input:HTMLSelectElement = addForeignKeyOptions(name,tables);
-        //selects
-        const input = document.createElement("input");
-        input.setAttribute("type", "text");
-        input.setAttribute("name", name);
-        input.id = name;
         field.appendChild(label);
+        const input = value in fieldTitles.slice(2) ?
+            addForeignKeyOptions(name) : // References
+            addForeignKeyOptions(name); // on update and delete
         field.appendChild(input);
         form.appendChild(field);
     });
     return form;
 }
+const body = document.querySelector("body");
+body === null || body === void 0 ? void 0 : body.appendChild(createFieldForm());
 function addForeignKeyOptions(name, options) {
+    // TODO: dont allow null for options parameter
+    /*
+    if (on delete & on update):
+    - No Action
+    - Restrict
+    - Cascade
+    - Set NULL
+    - Set Default
+
+    if (reference Table) => show available tables
+    if (reference Field) => show available fields
+    */
+    if (!options) {
+        options = ["No Action", "Restrict", "Cascade", "Set NULL", "Set Default"];
+    }
     const select = document.createElement("select");
+    options.forEach((value) => {
+        const option = document.createElement("option");
+        option.innerText = value;
+        select.appendChild(option);
+    });
     return select;
 }
 function showForm() {
     return;
 }
-export {};

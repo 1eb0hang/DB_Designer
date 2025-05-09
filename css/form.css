@@ -2,3 +2,8 @@
 .form {
     border:solid 2px;
 }
+
+.constraints{
+    display:flex;
+    flex-direction: row;
+}

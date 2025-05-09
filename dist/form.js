@@ -8,14 +8,13 @@ const forms = {
      */
     "field": createFieldForm()
 };
-showForm("table", false);
-showForm("field", false);
-const body = document.querySelector("body");
-body === null || body === void 0 ? void 0 : body.appendChild(forms.table);
-body === null || body === void 0 ? void 0 : body.appendChild(forms.field);
-console.log(body);
-showForm("table", true);
-export default function showForm(type, value) {
+setup();
+export function setup() {
+    console.log("seting up forms");
+    showForm("table", false);
+    showForm("field", false);
+}
+export function showForm(type, value) {
     forms[type].classList.toggle("inactive", !value);
     console.log(`${type.toUpperCase()}: ${value}`);
     forms.table;
@@ -29,6 +28,7 @@ export default function showForm(type, value) {
  * @returns new form to create a table object
  */
 function createTableForm() {
+    var _a;
     const form = document.createElement("div");
     form.classList.add("form");
     const subform = document.createElement("div");
@@ -50,6 +50,8 @@ function createTableForm() {
         subform.appendChild(field);
     });
     subform.appendChild(addFieldButton(form));
+    subform.appendChild(addTable());
+    (_a = document.querySelector("body")) === null || _a === void 0 ? void 0 : _a.appendChild(form);
     return form;
 }
 function addFieldButton(form) {
@@ -58,8 +60,18 @@ function addFieldButton(form) {
     button.setAttribute("value", "+Add Field");
     button.addEventListener("click", (e) => {
         e.preventDefault();
-        showForm("table", false);
         showForm("field", true);
+        showForm("table", false);
+    });
+    return button;
+}
+function addTable() {
+    const button = document.createElement("input");
+    button.setAttribute("type", "button");
+    button.setAttribute("value", "Done");
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+        showForm("table", false);
     });
     return button;
 }
@@ -86,6 +98,7 @@ function addFieldButton(form) {
  * - on update
  */
 function createFieldForm() {
+    var _a;
     const form = document.createElement("div");
     form.classList.add("form");
     const subform = document.createElement("div");
@@ -117,7 +130,20 @@ function createFieldForm() {
     ;
     form.appendChild(addConstraints());
     form.appendChild(addForeignKeyReference());
+    (_a = document.querySelector("body")) === null || _a === void 0 ? void 0 : _a.appendChild(form);
     return form;
+}
+function resolveFieldButton(form) {
+    // will resolve field, taking us back to table form
+    const button = document.createElement("input");
+    button.setAttribute("type", "button");
+    button.setAttribute("value", "Add Field");
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+        showForm("field", false);
+        showForm("table", true);
+    });
+    return button;
 }
 // create select for type
 function addSelect(value, options) {
@@ -179,6 +205,7 @@ function addForeignKeyReference() {
         field.appendChild(input);
         form.appendChild(field);
     });
+    form.appendChild(resolveFieldButton());
     return form;
 }
 function addForeignKeyOptions(name, options) {

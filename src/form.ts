@@ -11,16 +11,15 @@ const forms = {
     */
     "field":createFieldForm()
 }
-showForm("table",false)
-showForm("field",false)
+setup();
 
-const body = document.querySelector<HTMLBodyElement>("body");
-body?.appendChild(forms.table);
-body?.appendChild(forms.field);
-console.log(body);
-showForm("table",true);
+export function setup(){
+    console.log("seting up forms");
+    showForm("table",false);
+    showForm("field",false);
+}
 
-export default function showForm(type:"table"|"field", value:boolean):void{
+export function showForm(type:"table"|"field", value:boolean):void{
     forms[type].classList.toggle("inactive", !value);
     console.log(`${type.toUpperCase()}: ${value}`);
     forms.table;
@@ -62,6 +61,8 @@ function createTableForm():HTMLElement {
     });
 
     subform.appendChild(addFieldButton(form));
+    subform.appendChild(addTable());
+    document.querySelector<HTMLBodyElement>("body")?.appendChild(form);
     return form;
 }
 
@@ -72,8 +73,20 @@ function addFieldButton(form:HTMLElement):HTMLInputElement{
 
     button.addEventListener("click",(e)=>{
         e.preventDefault();
-        showForm("table",false);
         showForm("field",true);
+        showForm("table",false);
+    })
+    return button;
+}
+
+function addTable():HTMLElement{
+    const button = document.createElement("input");
+    button.setAttribute("type","button");
+    button.setAttribute("value","Done");
+
+    button.addEventListener("click",(e)=>{
+        e.preventDefault();
+        showForm("table",false);
     })
     return button;
 }
@@ -137,8 +150,22 @@ function createFieldForm():HTMLElement{
 
     form.appendChild(addConstraints());
     form.appendChild(addForeignKeyReference());
-
+    document.querySelector<HTMLBodyElement>("body")?.appendChild(form);
     return form;
+}
+
+function resolveFieldButton(form?:HTMLElement):HTMLInputElement{ 
+    // will resolve field, taking us back to table form
+    const button = document.createElement("input");
+    button.setAttribute("type","button");
+    button.setAttribute("value","Add Field");
+
+    button.addEventListener("click",(e)=>{
+        e.preventDefault();
+        showForm("field",false);
+        showForm("table",true);
+    })
+    return button;
 }
 
 // create select for type
@@ -217,6 +244,7 @@ function addForeignKeyReference():HTMLElement{ // take in table array
         field.appendChild(input);
         form.appendChild(field);
     });
+    form.appendChild(resolveFieldButton());
     return form;
 }
 

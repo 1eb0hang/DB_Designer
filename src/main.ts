@@ -1,4 +1,5 @@
 import Editor from "./editor.js";
+import * as form from "./form.js";
 
 function main(){
     const canvas = document.querySelector<HTMLCanvasElement>(".canvas");
@@ -11,7 +12,9 @@ function main(){
     canvas.height = window.innerHeight;
 
     const editor:Editor = new Editor(canvas, ctx);
+    form.setup();
     editor.start();
 }
 
 main();
+form.showForm("table",true);

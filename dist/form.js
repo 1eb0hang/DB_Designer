@@ -1,4 +1,16 @@
 /**
+ * Form object from creating a table
+ */
+const tableForm = createTableForm();
+/**
+ * Form object for creating a table field
+ */
+const fieldForm = createFieldForm();
+// export default function showForm(type:"table"|"field", value:boolean):void{
+//     if(type=="table"){
+//     }
+// }
+/**
  * This form is to create a table, and has the following fields:
  * - table name
  * - field list (calls createFieldForm)
@@ -6,9 +18,12 @@
  *
  * @returns new form to create a table object
  */
-export function createTableForm() {
+function createTableForm() {
     const form = document.createElement("div");
     form.classList.add("form");
+    const subform = document.createElement("div");
+    subform.classList.add("subform");
+    form.appendChild(subform);
     const formFields = ["Name", "Description"];
     formFields.forEach((value) => {
         const field = document.createElement("div");
@@ -22,9 +37,20 @@ export function createTableForm() {
         input.id = `${value}Value`;
         field.appendChild(label);
         field.appendChild(input);
-        form.appendChild(field);
+        subform.appendChild(field);
     });
+    subform.appendChild(addFieldButton(form));
     return form;
+}
+function addFieldButton(form) {
+    const button = document.createElement("input");
+    button.setAttribute("type", "button");
+    button.setAttribute("value", "+Add Field");
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("Show field form");
+    });
+    return button;
 }
 /**
  * This form is to add fields to a table.
@@ -48,9 +74,12 @@ export function createTableForm() {
  * - on delete
  * - on update
  */
-export function createFieldForm() {
+function createFieldForm() {
     const form = document.createElement("div");
     form.classList.add("form");
+    const subform = document.createElement("div");
+    subform.classList.add("subform");
+    form.appendChild(subform);
     const fieldTitles = ["Name", "Type", "Size", "Default", "Description"];
     for (let value of fieldTitles) {
         const field = document.createElement("div");
@@ -63,7 +92,7 @@ export function createFieldForm() {
         // add select if value is type
         if (value.toLowerCase() == "type") {
             field.appendChild(addSelect(value, ["TEXT", "INTEGER", "BOOLEAN"])); // temporary
-            form.appendChild(field);
+            subform.appendChild(field);
             continue;
         }
         ;
@@ -72,7 +101,7 @@ export function createFieldForm() {
         input.setAttribute("type", "text");
         input.setAttribute("name", value.toLowerCase());
         field.appendChild(input);
-        form.appendChild(field);
+        subform.appendChild(field);
     }
     ;
     form.appendChild(addConstraints());
@@ -100,7 +129,7 @@ function addConstraints() {
      * - foreign key
      */
     const constraints = document.createElement("div");
-    constraints.classList.add("constraints", "form");
+    constraints.classList.add("constraints", "subform");
     const constraintTitles = ["PK", "AN", "UQ", "AI", "FK"];
     // TODO: Add an onhover or onclick key
     constraintTitles.forEach((value) => {
@@ -123,7 +152,7 @@ function addConstraints() {
 }
 function addForeignKeyReference() {
     const form = document.createElement("div");
-    form.classList.add("foreignKey", "form");
+    form.classList.add("foreignKey", "subform");
     const fieldTitles = ["Ref. Table", "Ref. Field", "On Delete", "On Update"];
     fieldTitles.forEach((value) => {
         const field = document.createElement("div");
@@ -141,8 +170,6 @@ function addForeignKeyReference() {
     });
     return form;
 }
-const body = document.querySelector("body");
-body === null || body === void 0 ? void 0 : body.appendChild(createFieldForm());
 function addForeignKeyOptions(name, options) {
     // TODO: dont allow null for options parameter
     /*
@@ -167,6 +194,4 @@ function addForeignKeyOptions(name, options) {
     });
     return select;
 }
-function showForm() {
-    return;
-}
+export {};

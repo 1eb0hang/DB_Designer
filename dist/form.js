@@ -1,15 +1,25 @@
-/**
- * Form object from creating a table
- */
-const tableForm = createTableForm();
-/**
- * Form object for creating a table field
- */
-const fieldForm = createFieldForm();
-// export default function showForm(type:"table"|"field", value:boolean):void{
-//     if(type=="table"){
-//     }
-// }
+const forms = {
+    /**
+     * Form object from creating a table
+     */
+    "table": createTableForm(),
+    /**
+     * Form object for creating a table field
+     */
+    "field": createFieldForm()
+};
+showForm("table", false);
+showForm("field", false);
+const body = document.querySelector("body");
+body === null || body === void 0 ? void 0 : body.appendChild(forms.table);
+body === null || body === void 0 ? void 0 : body.appendChild(forms.field);
+console.log(body);
+showForm("table", true);
+export default function showForm(type, value) {
+    forms[type].classList.toggle("inactive", !value);
+    console.log(`${type.toUpperCase()}: ${value}`);
+    forms.table;
+}
 /**
  * This form is to create a table, and has the following fields:
  * - table name
@@ -48,7 +58,8 @@ function addFieldButton(form) {
     button.setAttribute("value", "+Add Field");
     button.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("Show field form");
+        showForm("table", false);
+        showForm("field", true);
     });
     return button;
 }
@@ -194,4 +205,3 @@ function addForeignKeyOptions(name, options) {
     });
     return select;
 }
-export {};

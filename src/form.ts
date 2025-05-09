@@ -1,22 +1,30 @@
 import Table from "./table";
 import * as table from "./table.js";
 
-/**
- * Form object from creating a table
- */
-const tableForm = createTableForm();
+const forms = {
+    /**
+     * Form object from creating a table
+     */
+    "table":createTableForm(),
+   /**
+    * Form object for creating a table field
+    */
+    "field":createFieldForm()
+}
+showForm("table",false)
+showForm("field",false)
 
-/**
- * Form object for creating a table field
- */
-const fieldForm = createFieldForm();
+const body = document.querySelector<HTMLBodyElement>("body");
+body?.appendChild(forms.table);
+body?.appendChild(forms.field);
+console.log(body);
+showForm("table",true);
 
-
-// export default function showForm(type:"table"|"field", value:boolean):void{
-//     if(type=="table"){
-
-//     }
-// }
+export default function showForm(type:"table"|"field", value:boolean):void{
+    forms[type].classList.toggle("inactive", !value);
+    console.log(`${type.toUpperCase()}: ${value}`);
+    forms.table;
+}
 
 /** 
  * This form is to create a table, and has the following fields:
@@ -64,7 +72,8 @@ function addFieldButton(form:HTMLElement):HTMLInputElement{
 
     button.addEventListener("click",(e)=>{
         e.preventDefault();
-        console.log("Show field form");
+        showForm("table",false);
+        showForm("field",true);
     })
     return button;
 }

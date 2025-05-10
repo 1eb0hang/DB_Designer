@@ -28,7 +28,6 @@ class Editor {
         // requestAnimationFrame(this.start);
     }
 
-    
     readonly update = ():void=>{
         return;
     }

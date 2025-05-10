@@ -20,15 +20,29 @@ class ContextMenu {
         this.setOptions = (options) => {
             this.options = this.setMenuOptions(options);
         };
+        /**
+         * Sets menu visibility
+         * @param value visibility boolean
+         */
         this.show = (value) => {
             this.menu.classList.toggle("inactive", !value);
         };
+        /**
+         * updates context menu to be within screen bounds\
+         * should be called before show method
+         * @param x mouse x position
+         * @param y mouse y position
+         */
         this.updatePosition = (x, y) => {
             const maxLeft = window.innerWidth - this.menu.offsetWidth;
             const maxTop = window.innerHeight - this.menu.offsetHeight;
             this.menu.style.left = `${Math.min(maxLeft, x)}px`;
             this.menu.style.top = `${Math.min(maxTop, y)}px`;
         };
+        /**
+         * Creates a new context menu
+         * @returns new context menu as Html list object
+         */
         this.setMenu = () => {
             const menu = document.createElement("ul");
             menu.classList.add("menu", "inactive");
@@ -45,6 +59,11 @@ class ContextMenu {
             document.body.appendChild(menu);
             return menu;
         };
+        /**
+         * Verifies that options is not null
+         * @param options list of options
+         * @returns new options list or default list if `options` not set
+         */
         this.setMenuOptions = (options) => {
             if (!options) {
                 options = ["Add Table", "Add Note", "Import", "Export"];

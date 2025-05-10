@@ -1,10 +1,12 @@
+import MenuOption from "./menuoption";
+import Table from "./table";
 
 /**
  * Class for program-wide context menu
  */
 class ContextMenu{
-    private options:string[];
-    menu:HTMLElement;
+    private options:MenuOption[];
+    private menu:HTMLElement;
 
     constructor(){
         this.options = this.setMenuOptions();
@@ -26,7 +28,7 @@ class ContextMenu{
      * Menu object only updates after call to updateMenu
      * @param options optional parameter defining context menu options
      */
-    readonly setOptions = (options?:string[]):void=>{
+    readonly setOptions = (options?:MenuOption[]):void=>{
         this.options = this.setMenuOptions(options);
     }
     
@@ -64,11 +66,11 @@ class ContextMenu{
             const item = document.createElement("li");
             
             item.classList.add("ctx-link");
-            item.innerText = this.options[i];
+            item.innerText = this.options[i].name;
             
             item.addEventListener("click", (e)=>{
                 menu.classList.toggle("inactive", true);
-                console.log("Menu item requested");
+                this.options[i].action(e);
             });
             
             menu.appendChild(item);
@@ -83,9 +85,17 @@ class ContextMenu{
      * @param options list of options
      * @returns new options list or default list if `options` not set 
      */
-    private readonly setMenuOptions = (options?:string[]):string[]=>{
+    private readonly setMenuOptions = (options?:MenuOption[]):MenuOption[]=>{
+        let defaultOptions:MenuOption[] = [];
+        ["Add Table", "Add Note", "Import", "Export"].forEach((value)=>{
+            defaultOptions.push({
+                name:value,
+                action:(e:Event)=>console.log(value)
+            });
+        });
+
         if(!options){
-            options = ["Add Table", "Add Note", "Import", "Export"];
+            options = defaultOptions;
         }
         return options;
     }

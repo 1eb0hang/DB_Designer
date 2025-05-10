@@ -49,10 +49,10 @@ class ContextMenu {
             for (let i = 0; i < this.options.length; i += 1) {
                 const item = document.createElement("li");
                 item.classList.add("ctx-link");
-                item.innerText = this.options[i];
+                item.innerText = this.options[i].name;
                 item.addEventListener("click", (e) => {
                     menu.classList.toggle("inactive", true);
-                    console.log("Menu item requested");
+                    this.options[i].action(e);
                 });
                 menu.appendChild(item);
             }
@@ -65,8 +65,15 @@ class ContextMenu {
          * @returns new options list or default list if `options` not set
          */
         this.setMenuOptions = (options) => {
+            let defaultOptions = [];
+            ["Add Table", "Add Note", "Import", "Export"].forEach((value) => {
+                defaultOptions.push({
+                    name: value,
+                    action: (e) => console.log(value)
+                });
+            });
             if (!options) {
-                options = ["Add Table", "Add Note", "Import", "Export"];
+                options = defaultOptions;
             }
             return options;
         };

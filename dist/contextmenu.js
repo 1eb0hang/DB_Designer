@@ -1,3 +1,4 @@
+import { setup } from "./draw.js";
 /**
  * Class for program-wide context menu
  */
@@ -65,14 +66,17 @@ class ContextMenu {
          * @returns new options list or default list if `options` not set
          */
         this.setMenuOptions = (options) => {
-            let defaultOptions = [];
-            ["Add Table", "Add Note", "Import", "Export"].forEach((value) => {
-                defaultOptions.push({
-                    name: value,
-                    action: (e) => console.log(value)
-                });
-            });
             if (!options) {
+                let defaultOptions = [];
+                ["Add Table", "Add Note", "Import", "Export"].forEach((value) => {
+                    defaultOptions.push({
+                        name: value,
+                        action: () => {
+                            setup();
+                            // draw();
+                        }
+                    });
+                });
                 options = defaultOptions;
             }
             return options;

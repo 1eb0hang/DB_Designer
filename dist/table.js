@@ -1,4 +1,5 @@
 class Table {
-    constructor() { }
+    constructor() {
+    }
 }
 export default Table;

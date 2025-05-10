@@ -1,11 +1,12 @@
-import MenuOption from "./menuoption";
-import Table from "./table";
+import MenuOption from "./menuoption.js";
+import Table from "./table.js";
+import { setup } from "./draw.js";
 
 /**
  * Class for program-wide context menu
  */
 class ContextMenu{
-    private options:MenuOption[];
+    private options:any;
     private menu:HTMLElement;
 
     constructor(){
@@ -75,7 +76,6 @@ class ContextMenu{
             
             menu.appendChild(item);
         }
-
         document.body.appendChild(menu);
         return menu;
     }
@@ -85,21 +85,24 @@ class ContextMenu{
      * @param options list of options
      * @returns new options list or default list if `options` not set 
      */
-    private readonly setMenuOptions = (options?:MenuOption[]):MenuOption[]=>{
-        let defaultOptions:MenuOption[] = [];
-        ["Add Table", "Add Note", "Import", "Export"].forEach((value)=>{
-            defaultOptions.push({
-                name:value,
-                action:(e:Event)=>console.log(value)
-            });
-        });
-
+    private readonly setMenuOptions = (options?:any|MenuOption[]):MenuOption[]=>{
+        
         if(!options){
+            let defaultOptions:MenuOption[] = [];
+            ["Add Table", "Add Note", "Import", "Export"].forEach((value)=>{
+                defaultOptions.push({
+                    name:value,
+                    action:()=>{
+                        setup();
+                        // draw();
+                    }
+                });
+            });
             options = defaultOptions;
         }
+
         return options;
     }
-
 }
 
 export default ContextMenu;

@@ -1,9 +1,12 @@
 
 class Table{
-    constructor(){}
+    constructor(){
+
+    }
 }
 
 export interface Field{
+    [index:string]:string|Type|number|Contraints;
     name:string;
     type:Type;
     size:number;

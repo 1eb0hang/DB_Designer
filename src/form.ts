@@ -11,7 +11,6 @@ const forms = {
     */
     "field":createFieldForm()
 }
-setup();
 
 export function setup(){
     console.log("seting up forms");

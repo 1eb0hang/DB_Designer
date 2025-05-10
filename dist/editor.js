@@ -1,4 +1,5 @@
-// canvas and ctx are already defined
+import * as form from "./form.js";
+import ContextMenu from "./contextmenu.js";
 /**
  * Editor class used to control functions of the whole app
  */
@@ -8,27 +9,32 @@ class Editor {
      * @param ctx a defined 2d rendering context
      */
     constructor(canvas, ctx) {
+        this.start = (delta) => {
+            this.update();
+            this.render();
+            // requestAnimationFrame(this.start);
+        };
+        this.update = () => {
+            return;
+        };
+        this.render = () => {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            return;
+        };
+        this.setUpEventListeners = () => {
+            this.canvas.addEventListener("contextmenu", this.showContextMenu);
+            this.canvas.addEventListener("click", () => this.contextmenu.show(false));
+        };
+        this.showContextMenu = (event) => {
+            event.preventDefault();
+            this.contextmenu.updatePosition(event.clientX, event.clientY);
+            this.contextmenu.show(true);
+        };
         this.canvas = canvas;
         this.ctx = ctx;
-        this.setup();
-    }
-    start(delta) {
-        this.update();
-        this.render();
-        // requestAnimationFrame(this.start);
-    }
-    setup() {
-        this.canvas.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-            console.log("Context Menu Requested");
-        });
-    }
-    update() {
-        return;
-    }
-    render() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        return;
+        this.contextmenu = new ContextMenu();
+        form.setup();
+        this.setUpEventListeners();
     }
 }
 export default Editor;

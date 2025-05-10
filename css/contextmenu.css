@@ -1,5 +1,5 @@
-/* 
-#ctxMenu{
+ 
+.menu{
   width: 280px;
   margin:0;
   padding-left:0;
@@ -7,8 +7,6 @@
   background: #fafafa;
   position:fixed;
   font-size: 16px;
-  // top: 50px //comment out
-  visibility: hidden;
 }
 
 .ctx-link{
@@ -22,4 +20,4 @@
 .ctx-link:hover{
   background: #efefef;
 }
- */
+

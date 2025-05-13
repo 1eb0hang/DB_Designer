@@ -1,13 +1,12 @@
-#ctxMenu{
+ 
+.menu{
   width: 280px;
   margin:0;
   padding-left:0;
   box-shadow:0 0 10px rgba(0, 0, 0, 0.1);
-  background: #fff;
+  background: #fafafa;
   position:fixed;
   font-size: 16px;
-  /* top: 50px */
-  visibility: hidden;
 }
 
 .ctx-link{
@@ -21,3 +20,4 @@
 .ctx-link:hover{
   background: #efefef;
 }
+

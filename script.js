@@ -1,7 +1,7 @@
 import {Field, createField} from "./field.js"
 import {createConstraints} from "./constraints.js"
 
-const canvas = document.getElementById("canvas");
+const canvas = document.querySelectorAll(".canvas");
 const ctx = canvas.getContext("2d");
 
 const ctxMenu = document.createElement("ul");

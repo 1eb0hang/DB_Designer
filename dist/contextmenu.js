@@ -1,3 +1,4 @@
+// import Table from "./table.js";
 import { setup } from "./draw.js";
 /**
  * Class for program-wide context menu
@@ -47,13 +48,13 @@ class ContextMenu {
         this.setMenu = () => {
             const menu = document.createElement("ul");
             menu.classList.add("menu", "inactive");
-            for (let i = 0; i < this.options.length; i += 1) {
+            for (const name in this.options) {
                 const item = document.createElement("li");
                 item.classList.add("ctx-link");
-                item.innerText = this.options[i].name;
+                item.innerText = name;
                 item.addEventListener("click", (e) => {
                     menu.classList.toggle("inactive", true);
-                    this.options[i].action(e);
+                    this.options[name]();
                 });
                 menu.appendChild(item);
             }
@@ -66,20 +67,19 @@ class ContextMenu {
          * @returns new options list or default list if `options` not set
          */
         this.setMenuOptions = (options) => {
+            let defaultOptions = {};
             if (!options) {
-                let defaultOptions = [];
                 ["Add Table", "Add Note", "Import", "Export"].forEach((value) => {
-                    defaultOptions.push({
-                        name: value,
-                        action: () => {
-                            setup();
-                            // draw();
-                        }
-                    });
+                    defaultOptions[value] = () => {
+                        setup();
+                        // draw();
+                    };
                 });
-                options = defaultOptions;
             }
-            return options;
+            else {
+                defaultOptions = options;
+            }
+            return defaultOptions;
         };
         this.options = this.setMenuOptions();
         this.menu = this.setMenu();

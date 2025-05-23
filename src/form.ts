@@ -1,4 +1,4 @@
-import Table from "./table";
+// import Table from "./table";
 import * as table from "./table.js";
 
 const forms = {
@@ -11,6 +11,7 @@ const forms = {
     */
     "field":createFieldForm()
 }
+
 
 export function setup(){
     console.log("seting up forms");

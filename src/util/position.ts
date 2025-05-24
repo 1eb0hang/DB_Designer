@@ -1,4 +1,5 @@
 
+//TODO: make transition from world position to screen position
 class Position {
     x:number;
     y:number;

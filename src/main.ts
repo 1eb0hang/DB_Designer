@@ -1,4 +1,6 @@
 import Editor from "./editor.js";
+import { drawText } from "./temp.js";
+import Position from "./util/position.js";
 
 function main(){
     const canvas = document.querySelector<HTMLCanvasElement>(".canvas");
@@ -11,6 +13,7 @@ function main(){
     canvas.height = window.innerHeight;
 
     const editor:Editor = new Editor(canvas, ctx);
+    drawText("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}", new Position(100, 300));
     // editor.start();
 }
 

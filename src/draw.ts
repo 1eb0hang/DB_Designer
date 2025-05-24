@@ -1,4 +1,4 @@
-import Position from "./position.js";
+import Position from "./util/position.js";
 import Table, { Field } from "./table.js";
 
 // Make class
@@ -90,6 +90,7 @@ function textBorder(text:string){
 }
 
 export function setup(){
+    console.log("Setting up something");
     return;
 }
 

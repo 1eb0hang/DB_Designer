@@ -34,7 +34,7 @@ export function createText(text:string, ctx:CanvasRenderingContext2D):Paragraph{
             bottom:2,
         },
         border:{
-            colour:{r:0,g:0,b:0,a:255},
+            colour:{r:0,g:0,b:0,a:255}, // TODO: fix overlaping of borders makes section darker
             width:1
         },
         backgroundColour:{r:0,g:0,b:0,a:0},
@@ -53,11 +53,13 @@ export function getTextObjectWidth(text:Paragraph):number{
 export function getTextObjectHieght(text:Paragraph):number{
     // return text.border.width+
     return text.padding.top+
-           text.metrics.actualBoundingBoxAscent+
-           text.metrics.actualBoundingBoxDescent+
+           text.metrics.fontBoundingBoxAscent+
+           text.metrics.fontBoundingBoxDescent+
            text.padding.bottom
         //    text.border.width
 }
 
 export default Paragraph;
 export {Padding, Border};
+
+// drawText("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}", new Position(100, 300));

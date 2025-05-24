@@ -19,11 +19,10 @@ export function drawText(text:string, {x, y}:Position):void{
 }
 
 export function drawTextBorder(text:Paragraph, {x,y}:Position, ctx:CanvasRenderingContext2D):void{
-
     ctx.fillStyle = colourStringify(text.backgroundColour);
     ctx.strokeStyle= colourStringify(text.border.colour);
     ctx.lineWidth = text.border.width;
-    ctx.strokeRect(
+    ctx.strokeRect( //TODO: make path instead of rect
         x+((text.padding.left)*(-1)),
         y+(text.metrics.fontBoundingBoxDescent+(text.padding.left)),
         text.metrics.width+(text.padding.right*2),

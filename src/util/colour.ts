@@ -1,10 +1,10 @@
 
 interface Colour{
     [index:string]:number;
-    r:number|0;
-    g:number|0;
-    b:number|0;
-    a:number|0;
+    r:number;
+    g:number;
+    b:number;
+    a:number;
 }
 
 export function colourStringify(colour:Colour, hex=true):string{
@@ -21,7 +21,6 @@ function colourToHex(colour:Colour):string{
     for (const value in colour){
         strColour.push(toHex(colour[value], true));
     }
-    console.log("#"+strColour.join(""));
     return "#"+strColour.join("");
 }
 
@@ -32,9 +31,5 @@ function colourToRGBA(colour:Colour):string{
     }
     return `rgba(${strColour.join(",")}`;
 }
-
-// export function getColour(colour:string):Colour{
-
-// }
 
 export default Colour

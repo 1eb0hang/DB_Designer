@@ -1,14 +1,7 @@
 import Colour from "./colour.js";
 
-const TEXTPROPS = document.querySelector<HTMLCanvasElement>(".canvas")
-        ?.getContext("2d")?.measureText;
-
 interface Paragraph {
     value:string; // TODO: allow for multi line text
-    properties:TextProperties
-}
-
-interface TextProperties {
     metrics:TextMetrics;
     fontFace:string;
     padding:Padding;
@@ -29,29 +22,42 @@ interface Border{
     width:number
 }
 
-export function createText(text:string):Paragraph{
-    if(!TEXTPROPS) throw new Error("Canvas not initialized properly");
-
+export function createText(text:string, ctx:CanvasRenderingContext2D):Paragraph{
     return {
         value:text,
-        properties:{
-            metrics:TEXTPROPS(text),
-            fontFace:"sans",
-                padding:{
-                    left:2,
-                    right:2,
-                    top:2,
-                    bottom:2,
-                },
-                border:{
-                    colour:{r:0,g:0,b:0,a:1},
-                    width:2
-                },
-                colour:{r:0,g:0,b:0,a:1},
-                backgroundColour:{r:0,g:0,b:0,a:0}
-        } as TextProperties
+        metrics:ctx.measureText(text),
+        fontFace:"sans",
+        padding:{
+            left:2,
+            right:2,
+            top:2,
+            bottom:2,
+        },
+        border:{
+            colour:{r:0,g:0,b:0,a:255},
+            width:1
+        },
+        backgroundColour:{r:0,g:0,b:0,a:0},
+        colour:{r:0,g:0,b:0,a:255},
     };
 }
 
+export function getTextObjectWidth(text:Paragraph):number{
+    // return text.border.width+
+    return text.padding.left+
+           text.metrics.width+
+           text.padding.right
+        //    text.border.width
+}
+
+export function getTextObjectHieght(text:Paragraph):number{
+    // return text.border.width+
+    return text.padding.top+
+           text.metrics.actualBoundingBoxAscent+
+           text.metrics.actualBoundingBoxDescent+
+           text.padding.bottom
+        //    text.border.width
+}
+
 export default Paragraph;
-export {TextProperties, Padding, Border};
+export {Padding, Border};

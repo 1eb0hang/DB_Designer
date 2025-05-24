@@ -1,7 +1,6 @@
+import { drawField} from "./draw.js";
 import Editor from "./editor.js";
-import { drawText } from "./temp.js";
-import Position from "./util/position.js";
-import { createText, getTextObjectHieght, getTextObjectWidth } from "./util/text.js";
+import { createContraints, createField, setFieldValue } from "./table.js";
 
 function main(){
     const canvas = document.querySelector<HTMLCanvasElement>(".canvas");
@@ -14,6 +13,11 @@ function main(){
     canvas.height = window.innerHeight;
 
     const editor:Editor = new Editor(canvas, ctx);
+    ctx.font = "1.6em sans";
+    const field = createField("id","INTEGER");
+    const constraints = createContraints(true);
+    setFieldValue(field,{constraints:constraints}); 
+    drawField(field,ctx);
     // editor.start();
 }
 

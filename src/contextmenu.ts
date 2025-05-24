@@ -1,6 +1,6 @@
 import MenuOptions from "./menuoptions.js";
 // import Table from "./table.js";
-import { setup } from "./draw.js";
+// import { setup } from "./draw.js";
 
 /**
  * Class for program-wide context menu
@@ -90,7 +90,8 @@ class ContextMenu{
         if(!options){
             ["Add Table", "Add Note", "Import", "Export"].forEach((value)=>{
                 defaultOptions[value] = ()=>{
-                        setup();
+                        // setup();
+                        console.log("Setting up something");
                         // draw();
                     }
                 });

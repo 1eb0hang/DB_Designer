@@ -1,158 +1,50 @@
+import { Field } from "./table.js";
+import { colourStringify } from "./util/colour.js";
 import Position from "./util/position.js";
-import Table, { Field } from "./table.js";
+import Paragraph, {createText, getTextObjectWidth} from "./util/text.js";
 
-// Make class
-// take in context as class initialisation argument
-
-// and actually...fuck collision. We can do that later
-// any new thing that is drawn will be at the highest z index
-
-const ctx = document.querySelector<HTMLCanvasElement>(".canvas")
-    ?.getContext("2d");
-
-// function drawTable(table:Table){
-//     return;
-// }
-
-export function drawField(field:Field, pos:Position){
-    // export interface Field{
-    //     name:string;
-    //     type:Type;
-    //     size:number;
-    //     default:string;
-    //     description:string;
-    //     //colour
-    //     constraints:Contraints;
-    // }
-
-    // PK | NAME | TYPE
-
-    const ctx = document.querySelector<HTMLCanvasElement>(".canvas")
-        ?.getContext("2d");
+export function drawText(text:string|Paragraph, {x, y}:Position, ctx:CanvasRenderingContext2D):void{
+    // 16px //TODO: make scalable on zoom
+    // console.log(ctx.font);
     
-    if(!ctx) return;
+    const newText = typeof text == "string"?createText(text, ctx):text;
+    console.log(newText);
+    drawTextBorder(newText, new Position(x,y), ctx);
 
-    const constraintDisplay =  
-        field.constraints.primaryKey?"PK":
-        field.constraints.foriegnKey?"FK":"";
-
-    const nameDisplay = field.name;
-    const typeDisplay = field.type;
-
-    const displayArray = [constraintDisplay, nameDisplay, typeDisplay];
-
-    let prev = new Position(0,0);
-    //const length = ctx.measureText(constraintDisplay);
-
-    // text1 box = textPos -  textPos.length()/2
-    // text2 box = (textPos - textPos.length()/2) + (text1.pos+text1.length)
-    // text3 box = (textPos - textPos.length()/2) + (text2.pos+text2.length)
-
-    for(let i =0; i<[constraintDisplay, nameDisplay].length; i+=1){
-    //    ctx.fillText(displayArray[i], posi);
-    // }
-    // for(let value in displayArray){
-        // console.log(value);
-        // console.log(field[value])
-        const length = ctx.measureText(displayArray[i]);
-        const startPos = pos;
-        
-        if(i==1){
-            const len = ctx.measureText(displayArray[i-1]).width;
-            startPos.add(new Position(len,0));// displayArray[i-1].length.width
-        }
-        // else if(i==2){
-            // startPos.add(new Position(0,0));
-        // }
-
-        ctx.strokeStyle = "#000f";
-        ctx.fillStyle = "#ffffff9f";
-        ctx.font = "14px Ubuntu";
-        
-        ctx.strokeRect(
-            (startPos.x-length.width/2)-2,startPos.y-13, 
-            length.width +4, 16
-        )
-
-        ctx.fillRect(
-            (startPos.x-length.width/2)-2,startPos.y-13, 
-            length.width +4, 16
-        )
-    
-        ctx.fillStyle = "black";
-        ctx.textAlign = "center";
-        ctx.fillText(displayArray[i], pos.x, pos.y);
-    }
+    ctx.fillStyle = colourStringify(newText.colour, true);
+    ctx.fillText(newText.value, x, y);
 }
 
-function textBorder(text:string){
-
+export function drawTextBorder(text:Paragraph, {x,y}:Position, ctx:CanvasRenderingContext2D):void{
+    ctx.fillStyle = colourStringify(text.backgroundColour);
+    ctx.strokeStyle= colourStringify(text.border.colour);
+    ctx.lineWidth = text.border.width;
+    ctx.strokeRect( //TODO: make path instead of rect
+        x+((text.padding.left)*(-1)),
+        y+(text.metrics.fontBoundingBoxDescent+(text.padding.left)),
+        text.metrics.width+(text.padding.right*2),
+        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.left*2))
+    );
+    ctx.fillRect(
+        x+((text.padding.left)*(-1)),
+        y+(text.metrics.fontBoundingBoxDescent+(text.padding.left)),
+        text.metrics.width+(text.padding.right*2),
+        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.left*2))
+    );
 }
 
-export function setup(){
-    console.log("Setting up something");
-    return;
+export function drawField(field:Field,ctx:CanvasRenderingContext2D):void{
+    // PK/FK | NAME | TYPE
+    const mainRefText = field.constraints.primaryKey?"PK":
+                        field.constraints.foriegnKey?"FK":" ";
+    const pk = createText(mainRefText,ctx);
+    const name = createText(field.name,ctx);
+    const type = createText(field.type,ctx);
+
+    let accumlativeWidth = 0;
+    drawText(pk,new Position(100,100), ctx);
+    accumlativeWidth+=getTextObjectWidth(pk);
+    drawText(name,new Position(100+accumlativeWidth,100),ctx);
+    accumlativeWidth+=getTextObjectWidth(name);
+    drawText(type,new Position(100+accumlativeWidth,100),ctx);
 }
-
-
-// Temporary
-function drawTable(){
-    const ctx = document.querySelector<HTMLCanvasElement>(".canvas")
-    ?.getContext("2d");
-    if(!ctx) return;
-    ctx.strokeStyle = "red";
-    ctx.textAlign = "center";  // order doesnt matter, just as long as its before fill text
-    // ctx.textBaseLine = "middle";
-    ctx.font = "11px Ubuntu";
-    const length = ctx.measureText("Hello world!");
-    console.log(`Text Length: ${length.width}`);
-    ctx.fillStyle = "white";
-    ctx.fillRect(100-length.width/2 -2, 100-11, length.width+3, 100);
-    ctx.fillStyle = "black";
-    ctx.fillText("Hello world!", 100, 100); // can also be stroke text
-}
-
-/**
- * classes:
- * - Coordinates or some kind or 2d positioning class
- * - colour class (rgba(hex or 255), hsv)
- */
-
-/**
- * # functions i need
- * ## position.inRadius(origin:Coordinate, radius:number):boolean
- * check if point in radius
- * 
- * ## position.inArea(bottomLeft:Coordinate, topRight:Coordinate):boolean
- * check if point in square area
- */
-/**
- * export interface Field{
-     name:string;
-     type:Type;
-     size:number;
-     default:string;
-     description:string;
-     //colour
-     constraints:Contraints;
- }
- 
- export interface Contraints{
-     primaryKey:boolean;
-     allowNull:boolean;
-     unique:boolean;
-     autoIncrement:boolean;
-     foriegnKey:boolean;
-     foriegnKeyValue:ForeingKey
- }
- 
- export type ForeingKey = null|{
-     refTable:Table;
-     refField:Field;
-     onDelete:string;
-     onUpdate:string;
- };
- 
- export type Type = 
-     "INTEGER"|"TEXT"|"BOOLEAN";
- */

@@ -43,6 +43,16 @@ export type ForeingKey = null|{
     onUpdate:string;
 };
 
+// export interface DisplayTable{
+
+// }
+
+// export interface DsiplayField{
+//     symbol:"PK"|"FK"|" ";
+//     name:string;
+//     type:Type;
+// }
+
 export function createTable(fieldArr:Field[], pos?:Position):Table{
 // export function createTable(tableArr:{[index:number]:Field}):Table{
     const fields:Fields = {};

@@ -1,6 +1,6 @@
-import MenuOption from "./menuoption.js";
-import Table from "./table.js";
-import { setup } from "./draw.js";
+import MenuOptions from "./menuoptions.js";
+// import Table from "./table.js";
+// import { setup } from "./draw.js";
 
 /**
  * Class for program-wide context menu
@@ -29,7 +29,7 @@ class ContextMenu{
      * Menu object only updates after call to updateMenu
      * @param options optional parameter defining context menu options
      */
-    readonly setOptions = (options?:MenuOption[]):void=>{
+    readonly setOptions = (options?:MenuOptions):void=>{
         this.options = this.setMenuOptions(options);
     }
     
@@ -52,7 +52,7 @@ class ContextMenu{
         const maxTop = window.innerHeight - this.menu.offsetHeight;
       
         this.menu.style.left = `${Math.min(maxLeft,x)}px`;
-        this.menu.style.top = `${Math.min(maxTop, y)}px`;      
+        this.menu.style.top = `${Math.min(maxTop, y)}px`;
     }
 
     /**
@@ -63,15 +63,15 @@ class ContextMenu{
         const menu = document.createElement("ul");
         menu.classList.add("menu","inactive");
 
-        for(let i = 0; i<this.options.length; i+=1 ){
+        for(const name in this.options){
             const item = document.createElement("li");
             
             item.classList.add("ctx-link");
-            item.innerText = this.options[i].name;
+            item.innerText = name;
             
             item.addEventListener("click", (e)=>{
                 menu.classList.toggle("inactive", true);
-                this.options[i].action(e);
+                this.options[name]();
             });
             
             menu.appendChild(item);
@@ -85,23 +85,21 @@ class ContextMenu{
      * @param options list of options
      * @returns new options list or default list if `options` not set 
      */
-    private readonly setMenuOptions = (options?:any|MenuOption[]):MenuOption[]=>{
-        
+    private readonly setMenuOptions = (options?:MenuOptions):MenuOptions=>{
+        let defaultOptions:MenuOptions = {};
         if(!options){
-            let defaultOptions:MenuOption[] = [];
             ["Add Table", "Add Note", "Import", "Export"].forEach((value)=>{
-                defaultOptions.push({
-                    name:value,
-                    action:()=>{
-                        setup();
+                defaultOptions[value] = ()=>{
+                        // setup();
+                        console.log("Setting up something");
                         // draw();
                     }
                 });
-            });
-            options = defaultOptions;
+        }else{
+            defaultOptions = options;
         }
 
-        return options;
+        return defaultOptions;
     }
 }
 

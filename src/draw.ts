@@ -1,157 +1,101 @@
-import Position from "./position.js";
 import Table, { Field } from "./table.js";
+import { colourStringify } from "./util/colour.js";
+import Position from "./util/position.js";
+import Paragraph, {createText, getTextObjectHieght, getTextObjectWidth} from "./util/text.js";
 
-// Make class
-// take in context as class initialisation argument
-
-// and actually...fuck collision. We can do that later
-// any new thing that is drawn will be at the highest z index
-
-const ctx = document.querySelector<HTMLCanvasElement>(".canvas")
-    ?.getContext("2d");
-
-// function drawTable(table:Table){
-//     return;
-// }
-
-export function drawField(field:Field, pos:Position){
-    // export interface Field{
-    //     name:string;
-    //     type:Type;
-    //     size:number;
-    //     default:string;
-    //     description:string;
-    //     //colour
-    //     constraints:Contraints;
-    // }
-
-    // PK | NAME | TYPE
-
-    const ctx = document.querySelector<HTMLCanvasElement>(".canvas")
-        ?.getContext("2d");
+export function drawText(text:string|Paragraph, {x, y}:Position, ctx:CanvasRenderingContext2D):void{
+    // 16px //TODO: make scalable on zoom
+    // console.log(ctx.font);
     
-    if(!ctx) return;
+    const newText = typeof text == "string"?createText(text, ctx):text;
+    // console.log(newText);
+    drawTextBorder(newText, new Position(x,y), ctx);
 
-    const constraintDisplay =  
-        field.constraints.primaryKey?"PK":
-        field.constraints.foriegnKey?"FK":"";
+    ctx.fillStyle = colourStringify(newText.colour, true);
+    ctx.fillText(newText.value, x, y);
+}
 
-    const nameDisplay = field.name;
-    const typeDisplay = field.type;
+export function drawTextBorder(text:Paragraph, {x,y}:Position, ctx:CanvasRenderingContext2D):void{
+    ctx.fillStyle = colourStringify(text.backgroundColour);
+    ctx.strokeStyle= colourStringify(text.border.colour);
+    ctx.lineWidth = text.border.width;
+    ctx.strokeRect( //TODO: make path instead of rect
+        x+((text.padding.left)*(-1)),
+        y+(text.metrics.fontBoundingBoxDescent+(text.padding.left)),
+        text.metrics.width+(text.padding.right*2),
+        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.left*2))
+    );
+    ctx.fillRect(
+        x+((text.padding.left)*(-1)),
+        y+(text.metrics.fontBoundingBoxDescent+(text.padding.left)),
+        text.metrics.width+(text.padding.right*2),
+        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.left*2))
+    );
+}
 
-    const displayArray = [constraintDisplay, nameDisplay, typeDisplay];
-
-    let prev = new Position(0,0);
-    //const length = ctx.measureText(constraintDisplay);
-
-    // text1 box = textPos -  textPos.length()/2
-    // text2 box = (textPos - textPos.length()/2) + (text1.pos+text1.length)
-    // text3 box = (textPos - textPos.length()/2) + (text2.pos+text2.length)
-
-    for(let i =0; i<[constraintDisplay, nameDisplay].length; i+=1){
-    //    ctx.fillText(displayArray[i], posi);
-    // }
-    // for(let value in displayArray){
-        // console.log(value);
-        // console.log(field[value])
-        const length = ctx.measureText(displayArray[i]);
-        const startPos = pos;
-        
-        if(i==1){
-            const len = ctx.measureText(displayArray[i-1]).width;
-            startPos.add(new Position(len,0));// displayArray[i-1].length.width
-        }
-        // else if(i==2){
-            // startPos.add(new Position(0,0));
-        // }
-
-        ctx.strokeStyle = "#000f";
-        ctx.fillStyle = "#ffffff9f";
-        ctx.font = "14px Ubuntu";
-        
-        ctx.strokeRect(
-            (startPos.x-length.width/2)-2,startPos.y-13, 
-            length.width +4, 16
-        )
-
-        ctx.fillRect(
-            (startPos.x-length.width/2)-2,startPos.y-13, 
-            length.width +4, 16
-        )
+export function drawField(field:Field, {x,y}:Position,ctx:CanvasRenderingContext2D):void{
+    // PK/FK | NAME | TYPE
+    const mainRefText = field.constraints.primaryKey?"PK":
+                        field.constraints.foriegnKey?"FK":" ";
     
-        ctx.fillStyle = "black";
-        ctx.textAlign = "center";
-        ctx.fillText(displayArray[i], pos.x, pos.y);
+    const pk = createText(mainRefText,ctx);
+    const name = createText(field.name,ctx);
+    const type = createText(field.type,ctx);
+
+    let accumlativeWidth = 0;
+    const yTextOffset = getTextObjectHieght(pk);
+    drawText(pk,new Position(x+accumlativeWidth,y+yTextOffset), ctx);
+    accumlativeWidth+=getTextObjectWidth(pk);
+    drawText(name,new Position(x+accumlativeWidth,y+yTextOffset),ctx);
+    accumlativeWidth+=getTextObjectWidth(name);
+    drawText(type,new Position(x+accumlativeWidth,y+yTextOffset),ctx);
+}
+
+export function drawTable(table:Table, ctx:CanvasRenderingContext2D){
+    let  i = 0;
+    const textObjectHieght = getTextObjectHieght(createText(table.fields[0].name,ctx));
+    while(table.fields[i]){ // table.fields must be numeric indexes
+        const fieldOffset = i*textObjectHieght;
+        drawField(table.fields[i],new Position(100,100+fieldOffset),ctx);   
+        i+=1;
     }
-}
-
-function textBorder(text:string){
-
-}
-
-export function setup(){
-    return;
-}
-
-
-// Temporary
-function drawTable(){
-    const ctx = document.querySelector<HTMLCanvasElement>(".canvas")
-    ?.getContext("2d");
-    if(!ctx) return;
-    ctx.strokeStyle = "red";
-    ctx.textAlign = "center";  // order doesnt matter, just as long as its before fill text
-    // ctx.textBaseLine = "middle";
-    ctx.font = "11px Ubuntu";
-    const length = ctx.measureText("Hello world!");
-    console.log(`Text Length: ${length.width}`);
-    ctx.fillStyle = "white";
-    ctx.fillRect(100-length.width/2 -2, 100-11, length.width+3, 100);
-    ctx.fillStyle = "black";
-    ctx.fillText("Hello world!", 100, 100); // can also be stroke text
+    console.log("Table \"drawn\"");
 }
 
 /**
- * classes:
- * - Coordinates or some kind or 2d positioning class
- * - colour class (rgba(hex or 255), hsv)
+ * Gets the index of row with the widest string value in a specified column\
+ * This is specific to the visual representation of the table, rather than the\
+ * actual Table object
+ * @param arr 
+ * @returns zero base index of row with the widest column value
  */
+function getWidest(arr:string[], ctx:CanvasRenderingContext2D):number{// TODO:add some sort of text object reference
+    let res = 0;
+    for(let i =0; i<arr.length; i+=1){
+        const text = createText(arr[i],ctx);
+        if(getTextObjectWidth(text)>res){
+            res = i;
+        }
+    }
+    return res;
+}
 
 /**
- * # functions i need
- * ## position.inRadius(origin:Coordinate, radius:number):boolean
- * check if point in radius
- * 
- * ## position.inArea(bottomLeft:Coordinate, topRight:Coordinate):boolean
- * check if point in square area
+ * Gets values at specified column index. This is specific to the visual\
+ * representaion of the table, rather than the actual Table object
+ * @param table table from which to get column
+ * @param column index of column in table
+ * @returns array of objects in in column at specified index
  */
-/**
- * export interface Field{
-     name:string;
-     type:Type;
-     size:number;
-     default:string;
-     description:string;
-     //colour
-     constraints:Contraints;
- }
- 
- export interface Contraints{
-     primaryKey:boolean;
-     allowNull:boolean;
-     unique:boolean;
-     autoIncrement:boolean;
-     foriegnKey:boolean;
-     foriegnKeyValue:ForeingKey
- }
- 
- export type ForeingKey = null|{
-     refTable:Table;
-     refField:Field;
-     onDelete:string;
-     onUpdate:string;
- };
- 
- export type Type = 
-     "INTEGER"|"TEXT"|"BOOLEAN";
- */
+export function getColumnWidest(table:Table, column:0|1|2, ctx:CanvasRenderingContext2D):number{
+    const res:string[] = [];
+    let i = 0;
+    while(table.fields[i]){
+        const fieldText = column == 0?
+                (table.fields[i].constraints.foriegnKey?"FK":"PK") :
+                (column == 1?table.fields[i].name:table.fields[i].type);
+        res.push(fieldText);
+        i+=1;
+    }
+    return getWidest(res, ctx);
+}

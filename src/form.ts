@@ -1,6 +1,8 @@
 // import Table from "./table";
 import * as table from "./table.js";
 
+export type FormType = "table"|"field"|"import"|"export"|"note";
+
 const forms = {
     /**
      * Form object from creating a table
@@ -9,7 +11,16 @@ const forms = {
    /**
     * Form object for creating a table field
     */
-    "field":createFieldForm()
+    "field":createFieldForm(),
+    /**
+     * Form object from import sql
+     */
+    "import":document.createElement("div"),
+   /**
+    * Form object for exporting sql
+    */
+    "export":document.createElement("div"),
+    "note":document.createElement("div")
 }
 
 
@@ -19,7 +30,7 @@ export function setup(){
     showForm("field",false);
 }
 
-export function showForm(type:"table"|"field", value:boolean):void{
+export function showForm(type:FormType, value:boolean):void{
     forms[type].classList.toggle("inactive", !value);
     console.log(`${type.toUpperCase()}: ${value}`);
     forms.table;

@@ -1,3 +1,4 @@
+import { showForm, FormType } from "./form.js";
 import MenuOptions from "./menuoptions.js";
 // import Table from "./table.js";
 // import { setup } from "./draw.js";
@@ -88,10 +89,13 @@ class ContextMenu{
     private readonly setMenuOptions = (options?:MenuOptions):MenuOptions=>{
         let defaultOptions:MenuOptions = {};
         if(!options){
-            ["Add Table", "Add Note", "Import", "Export"].forEach((value)=>{
+            type temp = {[index:string]:FormType}
+            const defaultValues:temp = {"Add Table":"table", "Add Note":"note", "Import":"import", "Export":"export"};
+            for(let value in defaultValues){ // lucky thse all just happen to be forms
                 defaultOptions[value] = ()=>{
                         // setup();
                         console.log("Setting up something");
+                        showForm(defaultValues[value], true);
                         // draw();
                     }
                 });

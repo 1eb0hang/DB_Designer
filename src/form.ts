@@ -161,12 +161,14 @@ function createFieldForm():HTMLElement{
 
     form.appendChild(addConstraints());
     form.appendChild(addForeignKeyReference());
+    // form
     document.querySelector<HTMLBodyElement>("body")?.appendChild(form);
     return form;
 }
 
 function resolveFieldButton(form?:HTMLElement):HTMLInputElement{ 
     // will resolve field, taking us back to table form
+    if(form){console.log(form)}
     const button = document.createElement("input");
     button.setAttribute("type","button");
     button.setAttribute("value","Add Field");
@@ -204,7 +206,7 @@ function addConstraints():HTMLElement{
      * - foreign key
      */
     const constraints = document.createElement("div");
-    constraints.classList.add("constraints", "subform");
+    constraints.classList.add("constraints", "subform", "field");
     const constraintTitles = ["PK","AN","UQ","AI","FK"];
 
     // TODO: Add an onhover or onclick key

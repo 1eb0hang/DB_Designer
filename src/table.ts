@@ -5,13 +5,9 @@ import Position from "./util/position.js";
 // TODO: do unit testing
 
 export default interface Table{
-    fields:Fields,
-    position:Position
-}
-
-type Fields = {
     [index:string]:Field
 }
+
 
 export interface Field{
     [index:string]:string|Type|number|Constraints|Colour;
@@ -43,30 +39,18 @@ export type ForeingKey = null|{
     onUpdate:string;
 };
 
-// export interface DisplayTable{
 
-// }
-
-// export interface DsiplayField{
-//     symbol:"PK"|"FK"|" ";
-//     name:string;
-//     type:Type;
-// }
-
-export function createTable(fieldArr:Field[], pos?:Position):Table{
+export function createTable(fieldArr:Field[]):Table{
 // export function createTable(tableArr:{[index:number]:Field}):Table{
-    const fields:Fields = {};
+    const table:Table = {};
     let count = 0;
     fieldArr.forEach((value:Field)=>{
-        fields[value.name] = value;
-        fields[count] = value;
+        table[value.name] = value;
+        table[count] = value;
         count+=1;
     })
 
-    return {
-        fields:fields,
-        position:pos||new Position(0,0),
-    } as Table;
+    return table;
 }
 
 export function createField(
@@ -119,6 +103,10 @@ export function setFieldValue(field:Field,values:Partial<Field>):void{
         if(!values[value]) continue;
         field[value] = values[value];
     }
+}
+
+export function getFieldIndex(table:Table){
+    
 }
 
 // const fields = [

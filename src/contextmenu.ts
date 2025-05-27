@@ -89,7 +89,7 @@ class ContextMenu{
     private readonly setMenuOptions = (options?:MenuOptions):MenuOptions=>{
         let defaultOptions:MenuOptions = {};
         if(!options){
-            type temp = {[index:string]:FormType}
+            type temp = {[index:string]:FormType} // TODO: maybe try integrate it with MenuOptions type
             const defaultValues:temp = {"Add Table":"table", "Add Note":"note", "Import":"import", "Export":"export"};
             for(let value in defaultValues){ // lucky thse all just happen to be forms
                 defaultOptions[value] = ()=>{
@@ -98,11 +98,10 @@ class ContextMenu{
                         showForm(defaultValues[value], true);
                         // draw();
                     }
-                });
+                };
         }else{
             defaultOptions = options;
         }
-
         return defaultOptions;
     }
 }

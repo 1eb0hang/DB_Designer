@@ -21,9 +21,9 @@ function main(){
     ctx.font = "1.6em sans";
     const field = createField("id","INTEGER");
     const constraints2 = createContraints(true);
-    const field2 = createField("id2","INTEGER");
+    const field2 = createField("id2dwafx","INTEGER");
     const constraints3 = createContraints(true);
-    const field3 = createField("id3","INTEGER");
+    const field3 = createField("id3","TEXT");
     const constraints4 = createContraints(true);
     const field4 = createField("id4","INTEGER");
     const constraints = createContraints(true);

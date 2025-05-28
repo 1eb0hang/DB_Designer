@@ -33,19 +33,44 @@ export function createDisplayTable(table:Table, position:Position, ctx:CanvasRen
         height:0
     }
     // displayTable.width =
+    console.log(displayTable.fields);
+    // console.log(displayTable);
     return displayTable;
 }
 
 function createFields(table:Table, ctx:CanvasRenderingContext2D):DisplayFieldCollection{
     const res:DisplayFieldCollection = {}
-    let count = 0;
     for(let field in table){
-        if(isNaN(Number(field))) continue; // we only using numeric indecies
+        if(isNaN(Number(field))) continue; // we only using numeric indecies defined in tale object
 
         res[field] = createDisplayField(table[field], ctx);
         res[res[field].name.value] = res[field]
-        count+=1;
-        console.log(field);
+        // console.log(field);
+    }
+
+    const columnWidths:{[index:string]:number} = {
+        primaryConstraint   : getColumnWidest(res,0),
+        name                : getColumnWidest(res,1),
+        type                : getColumnWidest(res,2)
+    }
+
+    // console.log(columnWidths);
+    
+    for(let key in res){
+        for(let text in columnWidths){
+            // console.log(`Key:${key}, text:${text}`);
+            if(!isNaN(Number(key))) continue;
+
+            let paragraph = res[key][text];
+            // console.log(paragraph);
+            if(typeof paragraph == "number") throw new Error("Only use above object");
+
+            // console.log(text+" before : ", getTextObjectWidth(paragraph))
+            paragraph.padding.right += (columnWidths[text]-getTextObjectWidth(paragraph));
+            // console.log(text+" after : ", getTextObjectWidth(paragraph))
+
+            // paragraph.padding.right = columnWidths[text]
+        }
     }
     return res;
 }
@@ -94,13 +119,13 @@ export function getColumnWidest(fields:DisplayFieldCollection, column:0|1|2):num
     //     res.push(fieldText);
     //     i+=1;
     // }
-    const fieldName = ["name", "type", "primaryConstraint"][column];
+    const fieldName = [ "primaryConstraint", "name", "type"][column];
     for(let value in fields){
         if(typeof fields[value][fieldName] != "number"){
             res.push(fields[value][fieldName]);
         }
     }
-    console.log(`Array of column ${column}:\n${res}`);
+    // console.log(`Array of column ${column}:\n${res}`);
     return getWidest(res);
 }
 
@@ -120,6 +145,7 @@ function getWidest(arr:Paragraph[]):number{
             res = i;
         }
     }
-    console.log(`Widex index: ${arr[res]}`);
+    // console.log(`Widex index: ${arr[res]}`);
     return getTextObjectWidth(arr[res]);
+    // return res;
 }

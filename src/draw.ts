@@ -34,15 +34,15 @@ export function drawTextBorder(text:Paragraph, {x,y}:Position, ctx:CanvasRenderi
     ctx.lineWidth = text.border.width;
     ctx.strokeRect( //TODO: make path instead of rect
         x+((text.padding.left)*(-1)),
-        y+(text.metrics.fontBoundingBoxDescent+(text.padding.left)),
-        text.metrics.width+(text.padding.right*2),
-        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.left*2))
+        y+(text.metrics.fontBoundingBoxDescent+(text.padding.bottom)),
+        text.metrics.width+(text.padding.left+text.padding.right),
+        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.top+text.padding.bottom))
     );
     ctx.fillRect(
         x+((text.padding.left)*(-1)),
-        y+(text.metrics.fontBoundingBoxDescent+(text.padding.left)),
-        text.metrics.width+(text.padding.right*2),
-        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.left*2))
+        y+(text.metrics.fontBoundingBoxDescent+(text.padding.bottom)),
+        text.metrics.width+(text.padding.left+text.padding.right),
+        -1*(text.metrics.fontBoundingBoxAscent+text.metrics.fontBoundingBoxDescent+(text.padding.top+text.padding.bottom))
     );
 }
 
@@ -84,7 +84,7 @@ export function drawTable(table:DisplayTable, ctx:CanvasRenderingContext2D):void
     //  -> text2 - pos1 + text1.hieght
     const textObjectHieght = getTextObjectHieght(table.fields[0].name); 
     // TODO: textObjectHieght change based on current text hieght
-    console.log(table);
+    // console.log(table);
     while(table.fields[i]){ // table.fields must be numeric indexes
         const fieldOffset = i*textObjectHieght; 
         // TODO: make offset acumulative so that to compencate for 

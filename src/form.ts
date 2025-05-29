@@ -1,9 +1,12 @@
 // import Table from "./table";
-import * as table from "./table.js";
+import Table, * as table from "./table.js";
 
 export type FormType = "table"|"field"|"import"|"export"|"note";
 
-const forms = {
+let currentTable = table.createTable([]);
+let currentDisplayFieldsTable = document.createElement("table");
+
+const forms:{[index:string]:HTMLFormElement} = {
     /**
      * Form object from creating a table
      */
@@ -15,14 +18,21 @@ const forms = {
     /**
      * Form object from import sql
      */
-    "import":document.createElement("div"),
+    "import":document.createElement("form"),
    /**
     * Form object for exporting sql
     */
-    "export":document.createElement("div"),
-    "note":document.createElement("div")
+    "export":document.createElement("form"),
+    "note":document.createElement("form")
 }
 
+export function setCurrentTable(table:Table){
+    currentTable = table;
+}
+
+export function setCurrentDisplayFieldsTable(table:HTMLTableElement){
+    currentDisplayFieldsTable = table;
+}
 
 export function setup(){
     console.log("seting up forms");
@@ -44,14 +54,14 @@ export function showForm(type:FormType, value:boolean):void{
  * 
  * @returns new form to create a table object
  */
-function createTableForm():HTMLElement {
-    const form = document.createElement("div");
+function createTableForm():HTMLFormElement {
+    const form = document.createElement("form");
     form.classList.add("form");
     const subform = document.createElement("div");
     subform.classList.add("subform");
     form.appendChild(subform);
     
-    const formFields = ["Name", "Description"];
+    const formFields = ["Name", "Description", "Colour"];
 
     formFields.forEach((value:string)=>{
         const field = document.createElement("div");
@@ -71,6 +81,11 @@ function createTableForm():HTMLElement {
         subform.appendChild(field);
     });
 
+    const table = currentDisplayFieldsTable;
+    table.classList.add("fieldTable");
+    table.id = "table"
+    
+    subform.appendChild(table);
     subform.appendChild(addFieldButton(form));
     subform.appendChild(addTable());
     document.querySelector<HTMLBodyElement>("body")?.appendChild(form);
@@ -97,6 +112,7 @@ function addTable():HTMLElement{
 
     button.addEventListener("click",(e)=>{
         e.preventDefault();
+        
         showForm("table",false);
     })
     return button;
@@ -124,12 +140,14 @@ function addTable():HTMLElement{
  * - on delete
  * - on update
  */
-function createFieldForm():HTMLElement{
-    const form = document.createElement("div");
+function createFieldForm():HTMLFormElement{
+    const form = document.createElement("form");
     form.classList.add("form");
     const subform = document.createElement("div");
     subform.classList.add("subform");
     form.appendChild(subform);
+
+    form.id = "fieldForm"
 
     const fieldTitles = ["Name","Type","Size","Default","Description"];
 
@@ -170,11 +188,16 @@ function resolveFieldButton(form?:HTMLElement):HTMLInputElement{
     // will resolve field, taking us back to table form
     if(form){console.log(form)}
     const button = document.createElement("input");
-    button.setAttribute("type","button");
+    button.setAttribute("type","submit");
     button.setAttribute("value","Add Field");
 
     button.addEventListener("click",(e)=>{
         e.preventDefault();
+        const form = document.forms.namedItem("fieldForm");
+        // const form = document.querySelector<HTMLFormElement>("form");
+        if(!form) return;
+        // console.log(form);
+        addFieldTable(getFieldFormData(form));
         showForm("field",false);
         showForm("table",true);
     })
@@ -207,11 +230,16 @@ function addConstraints():HTMLElement{
      */
     const constraints = document.createElement("div");
     constraints.classList.add("constraints", "subform", "field");
-    const constraintTitles = ["PK","AN","UQ","AI","FK"];
+    constraints.setAttribute("name", "constraints");
+    const constraintTitles:{[index:string]:string} = {"PK":"primaryKey",
+                              "AN":"allowNull",
+                              "UQ":"unique",
+                              "AI":"autoIncrement",
+                              "FK":"foriegnKey"};
 
     // TODO: Add an onhover or onclick key
 
-    constraintTitles.forEach((value)=>{
+    for(const value in constraintTitles){
         const constraint = document.createElement("div"); // for 1 constraint
         constraint.classList.add("constraint");
 
@@ -223,14 +251,14 @@ function addConstraints():HTMLElement{
         //constraint value (boolean)
         const constraintValue =  document.createElement("input");
         constraintValue.setAttribute("type","checkbox");
-        constraintValue.setAttribute("name",value);
+        constraintValue.setAttribute("name",constraintTitles[value]);
         constraintValue.id = value;
 
         constraint.appendChild(title);
         constraint.appendChild(constraintValue);
         constraints.appendChild(constraint);
 
-    })
+    }
     return constraints;
 }
 
@@ -254,7 +282,8 @@ function addForeignKeyReference():HTMLElement{ // take in table array
             addForeignKeyOptions(name): // References
             addForeignKeyOptions(name); // on update and delete
 
-        field.appendChild(input);
+        field.appendChild(input);    
+        // currentDisplayFieldsTable.appendChild(tableData);
         form.appendChild(field);
     });
     form.appendChild(resolveFieldButton());
@@ -286,4 +315,79 @@ function addForeignKeyOptions(name:string, options?:string[]):HTMLSelectElement{
         select.appendChild(option);
     });
     return select;
+}
+
+// function getTableFormData(form:HTMLFormElement):Table{
+
+// }
+
+function getFieldFormData(form:HTMLFormElement):table.Field{
+    const field = table.createField("", "TEXT");
+    /*
+     *  0: <input type="text" name="name">​
+     *  1: <select name="type">​
+     *  2: <input type="text" name="size">​
+     *  3: <input type="text" name="default">​
+     *  4: <input type="text" name="description">​
+     *  5: <input id="PK" type="checkbox" name="PK">​
+     *  6: <input id="AN" type="checkbox" name="AN">​
+     *  7: <input id="UQ" type="checkbox" name="UQ">​
+     *  8: <input id="AI" type="checkbox" name="AI">​
+     *  9: <input id="FK" type="checkbox" name="FK">​
+     *  10: <select>​
+     *  11: <select>​
+     *  12: <select>​
+     *  13: <select>
+     */
+
+    for(let item in field){
+        const some = form.elements.namedItem(item) as HTMLInputElement || form.elements.namedItem("default");
+        // console.log(some.value);
+        field[item] = some.value || item;
+    }
+    
+    field.constraints = table.createContraints(false);
+    for(let item in field.constraints){
+        if(!isNaN(Number(item))) continue;
+        if(item == "foriegnKeyValue") continue;
+
+        const some = form.elements.namedItem(item) as HTMLInputElement;
+
+        field.constraints[item] = some.checked;
+        console.log(`${item}:${some.checked}`)
+    }
+
+    field.constraints.foriegnKeyValue = null;
+    console.log(field);
+
+    return field;
+}
+
+function addFieldTable(field:table.Field){
+    // let currentTable = table.createTable([]);
+    // let currentDisplayFieldsTable = document.createElement("table");
+    
+    // currentTable = 
+    const tableRow = document.createElement("tr");
+    currentDisplayFieldsTable.appendChild(tableRow);
+    // setCurrentDisplayFieldsTable()
+    
+    let tableData = document.createElement("td");
+    tableData.innerText = field.constraints.foriegnKey?"FK":
+                          field.constraints.primaryKey?"PK":"";
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement("td");
+    tableData.innerText = field.name;
+    tableRow.appendChild(tableData);
+    
+    tableData = document.createElement("td");
+    tableData.innerText = field.type;
+    tableRow.appendChild(tableData);
+    
+    tableData = document.createElement("td");
+    tableData.innerText = "edit...";
+    tableRow.appendChild(tableData);
+
+    // console.log(currentDisplayFieldsTable);
 }

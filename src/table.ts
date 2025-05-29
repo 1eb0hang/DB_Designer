@@ -62,6 +62,7 @@ export function createField(
     colour?:Colour,
     constraints?:Constraints
 ):Field{
+    // const field = {};
     return {
         name:name,
         type:type,
@@ -69,7 +70,7 @@ export function createField(
         defaultValue:defaultValue||"",
         description:description||"",
         colour:colour||{r:0,g:0,b:0,a:0},
-        constraints:constraints||createContraints(false)
+        constraints:constraints||createContraints(false),
     } as Field;
 }
 

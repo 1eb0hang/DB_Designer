@@ -106,9 +106,25 @@ export function setFieldValue(field:Field,values:Partial<Field>):void{
     }
 }
 
-export function getFieldIndex(table:Table){
-    
+export function setField(table:Table, field:Field){
+    table[field.name] = field;
+    let count = 0;
+    for(const field in table){
+        if(isNaN(Number(field))) continue;
+        console.log("index offset - ", table[field]);
+        count +=1;
+    }
+    table[count] = field;
 }
+
+export function removeField(table:Table, field:string|number){
+    delete table[field];
+    // TODO: find mactching index/string and delete it also
+}
+
+// export function getFieldIndex(table:Table){
+    
+// }
 
 // const fields = [
 //     createField("id","INTEGER",0,"","",undefined,createContraints(true)),

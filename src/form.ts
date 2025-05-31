@@ -1,40 +1,49 @@
 // import Table from "./table";
+import { drawTable } from "./draw.js";
+import Form from "./formClass.js";
 import Table, * as table from "./table.js";
 
-export type FormType = "table"|"field"|"import"|"export"|"note";
-
+let currentForm:Form|null = null;
 let currentTable = table.createTable([]);
-let currentDisplayFieldsTable = document.createElement("table");
+let currentTablePreview = document.createElement("table");
 
-const forms:{[index:string]:HTMLFormElement} = {
+export const forms:{[index:string]:HTMLFormElement} = {
     /**
      * Form object from creating a table
      */
     "table":createTableForm(),
-   /**
-    * Form object for creating a table field
-    */
+
+    /**
+     * Form object for creating a table field
+     */
     "field":createFieldForm(),
+
     /**
      * Form object from import sql
      */
     "import":document.createElement("form"),
-   /**
-    * Form object for exporting sql
-    */
+
+    /**
+     * Form object for exporting sql
+     */
     "export":document.createElement("form"),
+
     "note":document.createElement("form")
 }
 
-export function setCurrentTable(table:Table){
-    currentTable = table;
+export type FormType = "table"|"field"|"import"|"export"|"note";
+
+// export function setCurrentTable(table:Table){
+//     currentTable = table;
+// }
+
+export function setCurrentTablePreview(table:HTMLTableElement){
+    currentTablePreview = table;
 }
 
-export function setCurrentDisplayFieldsTable(table:HTMLTableElement){
-    currentDisplayFieldsTable = table;
-}
+export function setup(form?:Form){
+    if(form) currentForm = form; 
 
-export function setup(){
     console.log("seting up forms");
     showForm("table",false);
     showForm("field",false);
@@ -54,7 +63,7 @@ export function showForm(type:FormType, value:boolean):void{
  * 
  * @returns new form to create a table object
  */
-function createTableForm():HTMLFormElement {
+export function createTableForm():HTMLFormElement {
     const form = document.createElement("form");
     form.classList.add("form");
     const subform = document.createElement("div");
@@ -81,7 +90,7 @@ function createTableForm():HTMLFormElement {
         subform.appendChild(field);
     });
 
-    const table = currentDisplayFieldsTable;
+    const table = currentTablePreview;
     table.classList.add("fieldTable");
     table.id = "table"
     
@@ -112,11 +121,21 @@ function addTable():HTMLElement{
 
     button.addEventListener("click",(e)=>{
         e.preventDefault();
+        if(currentForm){
+            currentForm.currentTable = currentTable;
+            console.log(currentForm.currentTable);
+            currentForm.updateEditorElements();
+            // drawTable(currentForm.currentTable);
+        }
         
         showForm("table",false);
     })
     return button;
 }
+
+// export function setTableButtonEventListener(func:()=>void){
+
+// }
 
 /**
  * This form is to add fields to a table.
@@ -140,7 +159,7 @@ function addTable():HTMLElement{
  * - on delete
  * - on update
  */
-function createFieldForm():HTMLFormElement{
+export function createFieldForm():HTMLFormElement{
     const form = document.createElement("form");
     form.classList.add("form");
     const subform = document.createElement("div");
@@ -197,7 +216,9 @@ function resolveFieldButton(form?:HTMLElement):HTMLInputElement{
         // const form = document.querySelector<HTMLFormElement>("form");
         if(!form) return;
         // console.log(form);
-        addFieldTable(getFieldFormData(form));
+        const field = getFieldFormData(form);
+        addFieldTable(field);
+        table.setField(currentTable, field);
         showForm("field",false);
         showForm("table",true);
     })
@@ -369,7 +390,7 @@ function addFieldTable(field:table.Field){
     
     // currentTable = 
     const tableRow = document.createElement("tr");
-    currentDisplayFieldsTable.appendChild(tableRow);
+    currentTablePreview.appendChild(tableRow);
     // setCurrentDisplayFieldsTable()
     
     let tableData = document.createElement("td");

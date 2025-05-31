@@ -52,6 +52,7 @@ export function getTextObjectWidth(text:Paragraph):number{
 
 export function getTextObjectHieght(text:Paragraph):number{
     // return text.border.width+
+    // console.log()
     return text.padding.top+
            text.metrics.fontBoundingBoxAscent+
            text.metrics.fontBoundingBoxDescent+

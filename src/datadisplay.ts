@@ -48,6 +48,8 @@ function createFields(table:Table, ctx:CanvasRenderingContext2D):DisplayFieldCol
         // console.log(field);
     }
 
+    console.log("Before column widths: ", res);
+
     const columnWidths:{[index:string]:number} = {
         primaryConstraint   : getColumnWidest(res,0),
         name                : getColumnWidest(res,1),
@@ -119,13 +121,15 @@ export function getColumnWidest(fields:DisplayFieldCollection, column:0|1|2):num
     //     res.push(fieldText);
     //     i+=1;
     // }
+    // console.log("Current Paragraph array: ", res);
     const fieldName = [ "primaryConstraint", "name", "type"][column];
+    // console.log("Current list of fields: ", fields);
     for(let value in fields){
         if(typeof fields[value][fieldName] != "number"){
             res.push(fields[value][fieldName]);
         }
     }
-    // console.log(`Array of column ${column}:\n${res}`);
+    console.log(`Array of column ${column}:\n${res}`);
     return getWidest(res);
 }
 

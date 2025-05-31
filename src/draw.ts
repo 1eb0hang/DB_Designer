@@ -93,6 +93,5 @@ export function drawTable(table:DisplayTable, ctx:CanvasRenderingContext2D):void
         drawField(table.fields[i],new Position(100,100+fieldOffset),ctx);   
         i+=1;
     }
-    console.log("Table \"drawn\"");
 }
 
